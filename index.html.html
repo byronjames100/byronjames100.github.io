@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Byron Enrico — MBA Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --deep:      #060e1c;
+    --navy:      #0a1628;
+    --navy2:     #0d1e35;
+    --gold:      #c9a84c;
+    --gold-lt:   #e8c96b;
+    --gold-dim:  rgba(201,168,76,0.15);
+    --cream:     #f5eed8;
+    --muted:     #7a8fa8;
+    --steel:     #c8d4e8;
+    --accent:    #2a5298;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'EB Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* grid overlay */
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ── PROGRESS ── */
+  #progress {
+    position:fixed; top:0; left:0; height:2px; z-index:300;
+    background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+    transition: width 0.1s;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:200;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0.9rem 3rem;
+    background: rgba(6,14,28,0.93);
+    border-bottom: 1px solid rgba(201,168,76,0.18);
+    backdrop-filter: blur(10px);
+  }
+  .nav-brand {
+    font-family:'Cinzel',serif; font-size:0.8rem;
+    letter-spacing:0.25em; color:var(--gold); text-decoration:none;
+  }
+  .nav-links { display:flex; gap:2rem; }
+  .nav-links a {
+    font-family:'Cinzel',serif; font-size:0.6rem;
+    letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--muted); text-decoration:none; transition:color 0.3s;
+  }
+  .nav-links a:hover { color:var(--gold); }
+  @media(max-width:600px){ .nav-links { display:none; } }
+
+  /* ── SECTIONS ── */
+  section {
+    position:relative; z-index:1;
+    padding: 6rem 2rem 5rem;
+    display:flex; justify-content:center;
+  }
+  section:nth-child(even) { background: rgba(10,22,40,0.5); }
+  .inner { max-width:1000px; width:100%; }
+
+  /* reveal */
+  .reveal {
+    opacity:0; transform:translateY(36px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height:100vh;
+    background: radial-gradient(ellipse at 30% 50%, rgba(42,82,152,0.3) 0%, transparent 65%),
+                radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 50%);
+    align-items:center;
+  }
+  .hero-grid {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:4rem; align-items:center;
+  }
+  @media(max-width:700px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .hero-eyebrow {
+    font-family:'Cinzel',serif; font-size:0.7rem;
+    letter-spacing:0.45em; color:var(--gold);
+    text-transform:uppercase; margin-bottom:1rem;
+  }
+  h1 {
+    font-family:'Cinzel',serif;
+    font-size:clamp(2.6rem,5.5vw,4.5rem);
+    font-weight:900; line-height:1.05;
+    color:var(--cream); margin-bottom:0.5rem;
+  }
+  h1 em { color:var(--gold); font-style:normal; }
+  .hero-title-sub {
+    font-family:'Cinzel',serif; font-size:0.85rem;
+    letter-spacing:0.25em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:2rem;
+  }
+  .hero-bio {
+    font-size:1.15rem; line-height:1.85;
+    color:var(--steel); margin-bottom:2rem;
+  }
+  .hero-cta-row { display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn {
+    font-family:'Cinzel',serif; font-size:0.65rem;
+    letter-spacing:0.2em; text-transform:uppercase;
+    padding:0.75rem 1.6rem; border-radius:2px;
+    text-decoration:none; transition:all 0.3s; cursor:pointer;
+  }
+  .btn-gold {
+    background:var(--gold); color:var(--deep);
+    border:2px solid var(--gold);
+  }
+  .btn-gold:hover { background:var(--gold-lt); border-color:var(--gold-lt); }
+  .btn-outline {
+    background:transparent; color:var(--gold);
+    border:2px solid rgba(201,168,76,0.5);
+  }
+  .btn-outline:hover { border-color:var(--gold); background:var(--gold-dim); }
+
+  /* Hero right — stats */
+  .hero-stats {
+    display:grid; grid-template-columns:1fr 1fr; gap:1rem;
+  }
+  .hero-stat {
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(201,168,76,0.18);
+    border-top:3px solid var(--gold);
+    padding:1.4rem 1.2rem; border-radius:2px;
+    transition:background 0.3s, transform 0.3s;
+  }
+  .hero-stat:hover { background:rgba(42,82,152,0.2); transform:translateY(-4px); }
+  .stat-n {
+    font-family:'Cinzel',serif; font-size:1.9rem;
+    font-weight:900; color:var(--gold); display:block; margin-bottom:0.3rem;
+  }
+  .stat-l { font-size:0.88rem; color:var(--muted); line-height:1.4; }
+
+  /* ── SHARED HEADINGS ── */
+  .section-label {
+    font-family:'Cinzel',serif; font-size:0.68rem;
+    letter-spacing:0.4em; color:var(--gold);
+    text-transform:uppercase; margin-bottom:0.5rem;
+  }
+  h2 {
+    font-family:'Cinzel',serif;
+    font-size:clamp(1.5rem,3.5vw,2.4rem);
+    font-weight:700; color:var(--cream);
+    margin-bottom:1.5rem; line-height:1.2;
+  }
+  .divider {
+    width:70px; height:2px; margin:1.2rem 0 2rem;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  }
+  p { font-size:1.1rem; line-height:1.85; color:var(--steel); margin-bottom:1rem; }
+  strong { color:var(--gold-lt); font-weight:500; }
+
+  /* ── BACKGROUND CARDS ── */
+  .bg-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1.2rem; margin-top:2rem;
+  }
+  .bg-card {
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(201,168,76,0.15);
+    border-left:3px solid var(--gold);
+    padding:1.4rem; border-radius:2px;
+    transition:background 0.3s, transform 0.3s;
+  }
+  .bg-card:hover { background:rgba(42,82,152,0.2); transform:translateX(4px); }
+  .bg-icon { font-size:1.6rem; margin-bottom:0.6rem; display:block; }
+  .bg-title {
+    font-family:'Cinzel',serif; font-size:0.78rem;
+    letter-spacing:0.1em; color:var(--gold);
+    margin-bottom:0.4rem;
+  }
+  .bg-desc { font-size:0.95rem; color:var(--muted); line-height:1.5; margin:0; }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:1.8rem; margin-top:2rem;
+  }
+  .project-card {
+    background:rgba(10,22,40,0.8);
+    border:1px solid rgba(201,168,76,0.2);
+    border-radius:4px; overflow:hidden;
+    transition:transform 0.35s, box-shadow 0.35s;
+    text-decoration:none; color:inherit; display:block;
+  }
+  .project-card:hover {
+    transform:translateY(-8px);
+    box-shadow:0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(201,168,76,0.15);
+  }
+  .project-thumb {
+    height:160px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,rgba(42,82,152,0.4),rgba(10,22,40,0.9));
+    border-bottom:1px solid rgba(201,168,76,0.15);
+    position:relative; overflow:hidden;
+  }
+  .project-thumb svg { opacity:0.7; }
+  .project-thumb::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(transparent 60%, rgba(6,14,28,0.8));
+  }
+  .project-tag {
+    position:absolute; top:0.8rem; right:0.8rem;
+    font-family:'Cinzel',serif; font-size:0.58rem;
+    letter-spacing:0.15em; padding:0.3rem 0.7rem;
+    background:rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4);
+    color:var(--gold); border-radius:2px; z-index:2;
+  }
+  .project-body { padding:1.4rem; }
+  .project-course {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.2em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:0.4rem;
+  }
+  .project-title {
+    font-family:'Cinzel',serif; font-size:1.05rem;
+    font-weight:700; color:var(--cream); margin-bottom:0.6rem;
+  }
+  .project-desc { font-size:0.95rem; color:var(--muted); line-height:1.55; margin:0 0 1rem; }
+  .project-link {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.2em; color:var(--gold);
+    text-decoration:none; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:0.4rem;
+  }
+  .project-link::after { content:'→'; transition:transform 0.3s; }
+  .project-card:hover .project-link::after { transform:translateX(4px); }
+
+  /* coming soon card */
+  .project-card.coming {
+    border-style:dashed; border-color:rgba(201,168,76,0.15);
+    opacity:0.55; pointer-events:none;
+  }
+  .project-card.coming .project-thumb {
+    background:rgba(10,22,40,0.5);
+  }
+
+  /* ── COURSE TIMELINE ── */
+  .timeline { margin-top:2.5rem; }
+  .semester-block { margin-bottom:2.5rem; }
+  .semester-label {
+    font-family:'Cinzel',serif; font-size:0.72rem;
+    letter-spacing:0.3em; color:var(--gold);
+    text-transform:uppercase; margin-bottom:1rem;
+    padding-bottom:0.5rem;
+    border-bottom:1px solid rgba(201,168,76,0.2);
+    display:flex; align-items:center; gap:0.8rem;
+  }
+  .semester-label .s-status {
+    font-size:0.58rem; padding:0.25rem 0.6rem;
+    border-radius:20px; letter-spacing:0.1em;
+  }
+  .s-complete { background:rgba(42,152,90,0.2); color:#6bde9a; border:1px solid rgba(42,152,90,0.3); }
+  .s-current  { background:rgba(201,168,76,0.2); color:var(--gold); border:1px solid rgba(201,168,76,0.4); }
+  .s-upcoming { background:rgba(42,82,152,0.2); color:var(--muted); border:1px solid rgba(42,82,152,0.3); }
+
+  .courses-row {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:0.8rem;
+  }
+  .course-pill {
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(201,168,76,0.12);
+    border-radius:3px; padding:0.9rem 1.1rem;
+    display:flex; flex-direction:column; gap:0.2rem;
+    transition:background 0.3s;
+  }
+  .course-pill:hover { background:rgba(42,82,152,0.18); }
+  .course-code {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.15em; color:var(--gold);
+  }
+  .course-name { font-size:0.98rem; color:var(--cream); }
+  .course-meta { font-size:0.82rem; color:var(--muted); }
+
+  /* ── GOALS ── */
+  .goal-box {
+    margin-top:2rem; padding:2.5rem;
+    background:rgba(42,82,152,0.1);
+    border:1px solid rgba(201,168,76,0.2);
+    border-radius:4px; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .goal-box::before {
+    content:'"'; position:absolute; top:-1rem; left:1rem;
+    font-family:'Cinzel',serif; font-size:8rem; font-weight:900;
+    color:rgba(201,168,76,0.05); line-height:1;
+    user-select:none;
+  }
+  .goal-text {
+    font-size:1.3rem; font-style:italic; line-height:1.8;
+    color:var(--cream); max-width:700px; margin:0 auto;
+    position:relative; z-index:1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position:relative; z-index:1;
+    text-align:center; padding:3rem 2rem;
+    border-top:1px solid rgba(201,168,76,0.1);
+  }
+  .footer-links { display:flex; justify-content:center; gap:2rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+  .footer-links a {
+    font-family:'Cinzel',serif; font-size:0.65rem;
+    letter-spacing:0.2em; color:var(--muted);
+    text-decoration:none; transition:color 0.3s;
+  }
+  .footer-links a:hover { color:var(--gold); }
+  .footer-copy {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.2em; color:rgba(201,168,76,0.3);
+  }
+
+  /* watermark number */
+  .wm {
+    position:absolute; top:4rem; right:2rem;
+    font-family:'Cinzel',serif; font-size:9rem; font-weight:900;
+    color:rgba(201,168,76,0.04); line-height:1;
+    user-select:none; pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <a class="nav-brand" href="#">Byron Enrico</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#courses">Courses</a>
+    <a href="#goals">Goals</a>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <div class="inner">
+    <div class="hero-grid reveal visible">
+
+      <div>
+        <p class="hero-eyebrow">MBA Portfolio · Jessup University</p>
+        <h1>Byron<br/><em>Enrico</em></h1>
+        <p class="hero-title-sub">MBA Candidate · Business Analytics · Class of 2027</p>
+        <p class="hero-bio">
+          Operations leader, Army veteran, and data-driven strategist. Currently pursuing my MBA at William Jessup University with a focus on Business Analytics — building the analytical toolkit to influence strategic decisions at the highest levels.
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn btn-gold" href="#projects">View My Work</a>
+          <a class="btn btn-outline" href="https://www.linkedin.com/in/byron-enrico/" target="_blank">LinkedIn Profile</a>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-n">9</span>
+          <span class="stat-l">Years of Service — US Army</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-n">5+</span>
+          <span class="stat-l">Years in Defense Manufacturing</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-n">BS</span>
+          <span class="stat-l">Operations & Supply Chain — Golden Gate University</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-n">MBA</span>
+          <span class="stat-l">Business Analytics Focus — In Progress, WJU 2027</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section id="about">
+  <span class="wm">02</span>
+  <div class="inner reveal">
+    <p class="section-label">Background</p>
+    <h2>Who I Am</h2>
+    <div class="divider"></div>
+    <p>I bring a unique intersection of <strong>military discipline</strong>, <strong>operational expertise</strong>, and <strong>analytical thinking</strong> to every challenge. Nine years in the US Army instilled a leadership philosophy built on integrity, adaptability, and mission focus. That foundation carried directly into defense manufacturing, where I spent five years as a Production Planner — coordinating complex supply chains and driving operational efficiency.</p>
+    <p>Now, through Jessup's MBA program, I'm adding the strategic and analytical layer — learning to translate data into decisions, and decisions into lasting organizational impact.</p>
+
+    <div class="bg-grid">
+      <div class="bg-card">
+        <span class="bg-icon">🎖️</span>
+        <div class="bg-title">US Army · 9 Years</div>
+        <p class="bg-desc">Leadership under pressure, logistical planning, and mission execution at scale. Built the habits of discipline and adaptability that define my professional approach.</p>
+      </div>
+      <div class="bg-card">
+        <span class="bg-icon">⚙️</span>
+        <div class="bg-title">Defense Manufacturing · 5 Years</div>
+        <p class="bg-desc">Production Planner in a precision manufacturing environment. Coordinated supply chains, managed schedules, and drove process improvements in a highly regulated industry.</p>
+      </div>
+      <div class="bg-card">
+        <span class="bg-icon">🎓</span>
+        <div class="bg-title">BS Operations & Supply Chain</div>
+        <p class="bg-desc">Undergraduate foundation in operations management and supply chain strategy from Golden Gate University — the academic lens that sharpened my operational instincts.</p>
+      </div>
+      <div class="bg-card">
+        <span class="bg-icon">📊</span>
+        <div class="bg-title">MBA · Business Analytics Focus</div>
+        <p class="bg-desc">Currently building expertise in data analytics, decision modeling, and strategic planning at William Jessup University. Expected completion: 2027.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PROJECTS ══════════ -->
+<section id="projects">
+  <span class="wm">03</span>
+  <div class="inner reveal">
+    <p class="section-label">Academic Work</p>
+    <h2>Projects & Presentations</h2>
+    <div class="divider"></div>
+    <p>Each project below represents coursework from Jessup's MBA program — research, analysis, and presentations built to solve real business problems.</p>
+
+    <div class="projects-grid">
+
+      <!-- PROJECT 1 — COMPASS (LIVE) -->
+      <a class="project-card" href="https://byronjames100.github.io/WJU-MBA-/" target="_blank">
+        <div class="project-thumb">
+          <span class="project-tag">Live ↗</span>
+          <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="90" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4 5"/>
+            <circle cx="100" cy="100" r="10" fill="rgba(201,168,76,0.3)" stroke="#c9a84c" stroke-width="1.5"/>
+            <polygon points="100,18 107,92 93,92" fill="#e8c96b"/>
+            <polygon points="100,182 107,108 93,108" fill="rgba(201,168,76,0.4)"/>
+            <polygon points="182,100 108,107 108,93" fill="rgba(201,168,76,0.4)"/>
+            <polygon points="18,100 92,107 92,93" fill="rgba(201,168,76,0.4)"/>
+            <text x="96" y="13" fill="#c9a84c" font-family="serif" font-size="12" font-weight="bold">N</text>
+            <circle cx="100" cy="100" r="4" fill="#c9a84c"/>
+          </svg>
+        </div>
+        <div class="project-body">
+          <p class="project-course">Graduate Research Methods · BUS591</p>
+          <p class="project-title">The Compass That Moved the World</p>
+          <p class="project-desc">A 5-minute interactive web presentation tracing the compass from ancient China to modern GPS — covering societal, commercial, and technological implications across 2,000 years of history.</p>
+          <span class="project-link">View Presentation</span>
+        </div>
+      </a>
+
+      <!-- PROJECT 2 — COMING SOON -->
+      <div class="project-card coming">
+        <div class="project-thumb">
+          <span class="project-tag">Coming Soon</span>
+          <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
+            <rect x="20" y="25" width="60" height="55" rx="3" stroke="rgba(201,168,76,0.4)" stroke-width="2"/>
+            <line x1="35" y1="42" x2="65" y2="42" stroke="rgba(201,168,76,0.3)" stroke-width="2"/>
+            <line x1="35" y1="52" x2="65" y2="52" stroke="rgba(201,168,76,0.3)" stroke-width="2"/>
+            <line x1="35" y1="62" x2="55" y2="62" stroke="rgba(201,168,76,0.3)" stroke-width="2"/>
+            <rect x="38" y="15" width="24" height="18" rx="2" fill="rgba(6,14,28,0.9)" stroke="rgba(201,168,76,0.4)" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="project-body">
+          <p class="project-course">Accounting & Financial Analysis · ACCT548</p>
+          <p class="project-title">Financial Analysis Project</p>
+          <p class="project-desc">In progress — Spring 2026</p>
+        </div>
+      </div>
+
+      <!-- PROJECT 3 — COMING SOON -->
+      <div class="project-card coming">
+        <div class="project-thumb">
+          <span class="project-tag">Coming Soon</span>
+          <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
+            <polyline points="15,75 35,45 55,60 75,25 85,35" stroke="rgba(201,168,76,0.4)" stroke-width="2.5" fill="none"/>
+            <circle cx="35" cy="45" r="3" fill="rgba(201,168,76,0.5)"/>
+            <circle cx="55" cy="60" r="3" fill="rgba(201,168,76,0.5)"/>
+            <circle cx="75" cy="25" r="3" fill="rgba(201,168,76,0.5)"/>
+          </svg>
+        </div>
+        <div class="project-body">
+          <p class="project-course">Technology & Innovation · BUS670</p>
+          <p class="project-title">Technology & Innovation Analysis</p>
+          <p class="project-desc">In progress — Spring 2026</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COURSES ══════════ -->
+<section id="courses">
+  <span class="wm">04</span>
+  <div class="inner reveal">
+    <p class="section-label">Academic Journey</p>
+    <h2>MBA Course Schedule</h2>
+    <div class="divider"></div>
+    <p>William Jessup University — Rocklin MBA Program. On-campus and remote 7-week intensive courses, with a <strong>Business Analytics emphasis</strong>.</p>
+
+    <div class="timeline">
+
+      <div class="semester-block">
+        <div class="semester-label">
+          Fall 2025
+          <span class="s-status s-complete">✓ Complete</span>
+        </div>
+        <div class="courses-row">
+          <div class="course-pill">
+            <span class="course-code">BUS500</span>
+            <span class="course-name">Principled Leadership & Ethics</span>
+            <span class="course-meta">Aug 25 – Oct 12 · Prof. Ellis</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS544</span>
+            <span class="course-name">Microeconomics for Managers</span>
+            <span class="course-meta">Oct 20 – Dec 14 · Prof. Martinez</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-label">
+          Spring 2026
+          <span class="s-status s-current">● In Progress</span>
+        </div>
+        <div class="courses-row">
+          <div class="course-pill">
+            <span class="course-code">BUS591</span>
+            <span class="course-name">Graduate Research Methods</span>
+            <span class="course-meta">Jan 12 – Mar 1 · Prof. Gilmore · Online</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">ACCT548</span>
+            <span class="course-name">Accounting & Financial Analysis</span>
+            <span class="course-meta">Jan 12 – Mar 1 · Prof. Richardson</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS670</span>
+            <span class="course-name">Technology & Innovation</span>
+            <span class="course-meta">Mar 9 – Apr 26 · Prof. Bryant</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-label">
+          Summer 2026
+          <span class="s-status s-upcoming">↑ Upcoming</span>
+        </div>
+        <div class="courses-row">
+          <div class="course-pill">
+            <span class="course-code">BUS543</span>
+            <span class="course-name">Finance & Data Analytics</span>
+            <span class="course-meta">May 4 – Jun 21 · Prof. Richardson</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS570</span>
+            <span class="course-name">Global Operations Mgmt & Supply Chain</span>
+            <span class="course-meta">Jun 29 – Aug 16 · Prof. Raskin</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-label">
+          Fall 2026
+          <span class="s-status s-upcoming">↑ Upcoming</span>
+        </div>
+        <div class="courses-row">
+          <div class="course-pill">
+            <span class="course-code">BUS620</span>
+            <span class="course-name">Global Marketing Strategy</span>
+            <span class="course-meta">Aug 24 – Oct 11</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS571</span>
+            <span class="course-name">Global Environment of Business</span>
+            <span class="course-meta">Aug 24 – Oct 11 · Prof. Winslow · Online</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS690</span>
+            <span class="course-name">Strategic Planning</span>
+            <span class="course-meta">Oct 19 – Dec 13 · Prof. Rice</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-label">
+          Spring 2027
+          <span class="s-status s-upcoming">↑ Upcoming</span>
+        </div>
+        <div class="courses-row">
+          <div class="course-pill">
+            <span class="course-code">BUS682</span>
+            <span class="course-name">Entrepreneurial Management</span>
+            <span class="course-meta">Jan 11 – Feb 28 · Prof. Bryant</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS691</span>
+            <span class="course-name">Big Data, Predictive Analytics & Ethics</span>
+            <span class="course-meta">Business Analytics Emphasis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-label">
+          Summer 2027 — Graduation
+          <span class="s-status s-upcoming">↑ Upcoming</span>
+        </div>
+        <div class="courses-row">
+          <div class="course-pill">
+            <span class="course-code">BUS692</span>
+            <span class="course-name">Decision Models (Power BI & Excel)</span>
+            <span class="course-meta">Business Analytics Emphasis</span>
+          </div>
+          <div class="course-pill">
+            <span class="course-code">BUS693</span>
+            <span class="course-name">Visual Analytics (Tableau)</span>
+            <span class="course-meta">Business Analytics Emphasis</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GOALS ══════════ -->
+<section id="goals">
+  <span class="wm">05</span>
+  <div class="inner reveal">
+    <p class="section-label">Professional Mission</p>
+    <h2>What Drives Me</h2>
+    <div class="divider"></div>
+
+    <div class="goal-box">
+      <p class="goal-text">
+        "To influence strategic decision making at the highest level — and provide long-lasting value and impact for those I work for and with."
+      </p>
+    </div>
+
+    <div class="bg-grid" style="margin-top:2rem;">
+      <div class="bg-card">
+        <span class="bg-icon">🎯</span>
+        <div class="bg-title">Strategic Impact</div>
+        <p class="bg-desc">Leveraging data and analytics to inform decisions that create measurable, lasting organizational value — not just short-term outputs.</p>
+      </div>
+      <div class="bg-card">
+        <span class="bg-icon">🤝</span>
+        <div class="bg-title">People-First Leadership</div>
+        <p class="bg-desc">Rooted in the Army's leadership philosophy — put people first, lead by example, and the mission will follow.</p>
+      </div>
+      <div class="bg-card">
+        <span class="bg-icon">📈</span>
+        <div class="bg-title">Data-Driven Decisions</div>
+        <p class="bg-desc">Business Analytics emphasis equips me to translate complex datasets into clear strategic narratives that move organizations forward.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="divider" style="margin:0 auto 1.5rem;"></div>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/byron-enrico/" target="_blank">LinkedIn</a>
+    <a href="https://byronjames100.github.io/WJU-MBA-/" target="_blank">Compass Presentation</a>
+    <a href="https://github.com/byronjames100" target="_blank">GitHub</a>
+  </div>
+  <p class="footer-copy">Byron Enrico &nbsp;·&nbsp; WJU MBA Candidate 2027 &nbsp;·&nbsp; Business Analytics</p>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY, t = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (s/t*100)+'%';
+  });
+
+  // Reveal on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
