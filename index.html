@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Byron Enrico — Virtuous Leader · Strategic Operator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --dark:      #130d07;
+    --warm:      #1c1208;
+    --warm2:     #241a0e;
+    --surface:   rgba(255,255,255,0.03);
+    --copper:    #c9a060;
+    --copper-lt: #e2b96e;
+    --copper-dim:rgba(201,160,96,0.12);
+    --parchment: #e8d5b0;
+    --parch-dim: rgba(232,213,176,0.6);
+    --parch-mute:rgba(232,213,176,0.35);
+    --muted:     rgba(232,213,176,0.45);
+    --border:    rgba(201,160,96,0.15);
+    --border-mid:rgba(201,160,96,0.25);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--parchment);
+    font-family: 'EB Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* grain texture overlay */
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    opacity:0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* progress bar */
+  #progress {
+    position:fixed; top:0; left:0; height:1px; z-index:500;
+    background: linear-gradient(90deg, var(--copper), var(--copper-lt), var(--copper));
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px rgba(201,160,96,0.4);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:200;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.1rem 3.5rem;
+    background: rgba(19,13,7,0.92);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    transition: padding 0.3s;
+  }
+  .nav-brand {
+    font-family:'Cinzel',serif; font-size:0.72rem;
+    letter-spacing:0.35em; color:var(--copper);
+    text-decoration:none; text-transform:uppercase;
+  }
+  .nav-links { display:flex; gap:2.5rem; align-items:center; }
+  .nav-links a {
+    font-family:'Cinzel',serif; font-size:0.58rem;
+    letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--muted); text-decoration:none;
+    transition:color 0.3s;
+  }
+  .nav-links a:hover { color:var(--copper); }
+  .nav-cta {
+    font-family:'Cinzel',serif; font-size:0.58rem;
+    letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--copper) !important;
+    border:1px solid var(--border-mid);
+    padding:0.45rem 1rem; border-radius:1px;
+    transition:all 0.3s !important;
+  }
+  .nav-cta:hover { background:var(--copper-dim) !important; border-color:var(--copper) !important; }
+  @media(max-width:680px){ .nav-links { display:none; } }
+
+  /* ── SECTIONS ── */
+  section {
+    position:relative; z-index:1;
+    padding:7rem 2rem 6rem;
+    display:flex; justify-content:center;
+  }
+  section:nth-child(even) { background:rgba(24,16,8,0.5); }
+  .inner { max-width:1020px; width:100%; }
+
+  /* reveal */
+  .reveal {
+    opacity:0; transform:translateY(28px);
+    transition:opacity 0.85s ease, transform 0.85s ease;
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-delay { transition-delay:0.15s; }
+  .reveal-delay2 { transition-delay:0.3s; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height:100vh; align-items:center;
+    background:
+      radial-gradient(ellipse at 20% 60%, rgba(201,160,96,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 30%, rgba(139,90,43,0.08) 0%, transparent 50%);
+  }
+
+  .hero-layout {
+    display:grid;
+    grid-template-columns:1fr 420px;
+    gap:5rem; align-items:center;
+  }
+  @media(max-width:820px){ .hero-layout{ grid-template-columns:1fr; gap:3rem; } }
+
+  /* watermark */
+  .hero-wm {
+    position:absolute; bottom:2rem; right:2rem;
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(5rem,12vw,10rem); font-weight:700; font-style:italic;
+    color:rgba(201,160,96,0.04); line-height:1;
+    user-select:none; pointer-events:none; letter-spacing:-0.02em;
+  }
+
+  .hero-eyebrow {
+    font-family:'Cinzel',serif; font-size:0.65rem;
+    letter-spacing:0.5em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:1.2rem;
+    display:flex; align-items:center; gap:0.8rem;
+  }
+  .hero-eyebrow::before {
+    content:''; display:inline-block;
+    width:30px; height:1px; background:var(--copper); opacity:0.6;
+  }
+
+  h1 {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(3rem,6vw,5.2rem);
+    font-weight:600; line-height:1.0;
+    color:var(--parchment); margin-bottom:0.3rem;
+    letter-spacing:-0.01em;
+  }
+  h1 em {
+    color:var(--copper); font-style:italic;
+    display:block;
+  }
+
+  .hero-tagline {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.15rem,2.2vw,1.5rem);
+    font-style:italic; color:var(--parch-dim);
+    margin:1.4rem 0 2rem; line-height:1.6;
+    border-left:2px solid var(--copper);
+    padding-left:1.2rem;
+  }
+  .hero-tagline strong {
+    color:var(--copper-lt); font-style:normal; font-weight:500;
+  }
+
+  .hero-bio {
+    font-size:1.1rem; line-height:1.9;
+    color:var(--parch-dim); margin-bottom:2.2rem;
+  }
+
+  .cta-row { display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.22em; text-transform:uppercase;
+    padding:0.85rem 1.8rem; border-radius:1px;
+    text-decoration:none; transition:all 0.3s; cursor:pointer; display:inline-block;
+  }
+  .btn-primary {
+    background:var(--copper); color:var(--dark);
+    border:1px solid var(--copper); font-weight:600;
+  }
+  .btn-primary:hover { background:var(--copper-lt); border-color:var(--copper-lt); }
+  .btn-ghost {
+    background:transparent; color:var(--copper);
+    border:1px solid var(--border-mid);
+  }
+  .btn-ghost:hover { border-color:var(--copper); background:var(--copper-dim); }
+
+  /* hero right — identity pillars */
+  .identity-pillars { display:flex; flex-direction:column; gap:1rem; }
+  .pillar {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-left:3px solid var(--copper);
+    padding:1.4rem 1.5rem;
+    transition:background 0.3s, transform 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .pillar::before {
+    content:''; position:absolute; top:0; right:0;
+    width:60px; height:100%;
+    background:linear-gradient(90deg,transparent,rgba(201,160,96,0.03));
+  }
+  .pillar:hover { background:rgba(201,160,96,0.06); transform:translateX(4px); }
+  .pillar-label {
+    font-family:'Cinzel',serif; font-size:0.6rem;
+    letter-spacing:0.2em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:0.35rem;
+  }
+  .pillar-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.05rem; font-style:italic;
+    color:var(--parch-dim); line-height:1.5; margin:0;
+  }
+
+  /* ── SHARED HEADINGS ── */
+  .section-eyebrow {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.45em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:0.6rem;
+    display:flex; align-items:center; gap:0.8rem;
+  }
+  .section-eyebrow::before {
+    content:''; display:inline-block;
+    width:24px; height:1px; background:var(--copper); opacity:0.5;
+  }
+
+  h2 {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.8rem,4vw,3rem);
+    font-weight:600; line-height:1.1;
+    color:var(--parchment); margin-bottom:1rem;
+    letter-spacing:-0.01em;
+  }
+  h2 em { color:var(--copper); font-style:italic; }
+
+  .rule {
+    width:60px; height:1px; margin:1rem 0 2.2rem;
+    background:linear-gradient(90deg,var(--copper),transparent);
+  }
+
+  p {
+    font-size:1.1rem; line-height:1.9;
+    color:var(--parch-dim); margin-bottom:1rem;
+  }
+  strong { color:var(--copper-lt); font-weight:500; }
+
+  /* section watermark */
+  .swm {
+    position:absolute; top:3rem; right:2rem;
+    font-family:'Cormorant Garamond',serif;
+    font-size:7rem; font-weight:700; font-style:italic;
+    color:rgba(201,160,96,0.04); line-height:1;
+    user-select:none; pointer-events:none; letter-spacing:-0.02em;
+  }
+
+  /* ── CODE SECTION ── */
+  .code-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.2rem; margin-top:2rem;
+  }
+  @media(max-width:640px){ .code-grid{ grid-template-columns:1fr; } }
+
+  .code-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-top:2px solid var(--copper);
+    padding:1.6rem 1.5rem;
+    transition:background 0.3s, transform 0.3s;
+  }
+  .code-card:hover { background:rgba(201,160,96,0.06); transform:translateY(-3px); }
+  .code-number {
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.5rem; font-weight:700; font-style:italic;
+    color:rgba(201,160,96,0.25); line-height:1; margin-bottom:0.4rem;
+  }
+  .code-title {
+    font-family:'Cinzel',serif; font-size:0.72rem;
+    letter-spacing:0.15em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:0.5rem;
+  }
+  .code-body { font-size:0.95rem; color:var(--muted); line-height:1.65; margin:0; }
+
+  /* ── PHILOSOPHY QUOTE ── */
+  .manifesto {
+    margin:3rem 0;
+    padding:2.8rem 3rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    position:relative; overflow:hidden;
+    text-align:center;
+  }
+  .manifesto::before {
+    content:'"'; position:absolute;
+    top:-2rem; left:1.5rem;
+    font-family:'Cormorant Garamond',serif;
+    font-size:10rem; font-weight:700;
+    color:rgba(201,160,96,0.06); line-height:1;
+    user-select:none;
+  }
+  .manifesto-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.3rem,2.8vw,1.8rem);
+    font-style:italic; line-height:1.7;
+    color:var(--parchment); position:relative; z-index:1;
+    max-width:760px; margin:0 auto 1rem;
+  }
+  .manifesto-attr {
+    font-family:'Cinzel',serif; font-size:0.6rem;
+    letter-spacing:0.3em; color:var(--muted);
+    text-transform:uppercase;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-row {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:1.2rem; margin-top:2rem;
+  }
+  .bg-block {
+    border:1px solid var(--border);
+    border-left:2px solid var(--copper);
+    padding:1.5rem;
+    background:var(--surface);
+    transition:background 0.3s;
+  }
+  .bg-block:hover { background:rgba(201,160,96,0.06); }
+  .bg-label {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.18em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:0.3rem;
+  }
+  .bg-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.1rem; font-weight:600;
+    color:var(--parchment); margin-bottom:0.4rem;
+  }
+  .bg-body { font-size:0.93rem; color:var(--muted); line-height:1.6; margin:0; }
+
+  /* ── CULTURE SECTION ── */
+  .culture-split {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4rem; align-items:start; margin-top:2rem;
+  }
+  @media(max-width:720px){ .culture-split{ grid-template-columns:1fr; gap:2rem; } }
+
+  .culture-list { list-style:none; margin-top:1.5rem; }
+  .culture-list li {
+    display:flex; gap:1rem; align-items:flex-start;
+    padding:0.9rem 0;
+    border-bottom:1px solid rgba(201,160,96,0.08);
+    font-size:1rem; color:var(--parch-dim); line-height:1.6;
+  }
+  .culture-list li::before {
+    content:''; display:block; flex-shrink:0;
+    width:1px; height:20px;
+    background:var(--copper); margin-top:3px; opacity:0.7;
+  }
+
+  .cycle-box {
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:2rem;
+  }
+  .cycle-step {
+    display:flex; align-items:flex-start;
+    gap:1.2rem; padding:0.8rem 0;
+  }
+  .cycle-step:not(:last-child) {
+    border-bottom:1px solid rgba(201,160,96,0.07);
+  }
+  .step-n {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.8rem; font-weight:700; font-style:italic;
+    color:rgba(201,160,96,0.3); line-height:1; flex-shrink:0; width:28px;
+  }
+  .step-content {}
+  .step-title {
+    font-family:'Cinzel',serif; font-size:0.65rem;
+    letter-spacing:0.15em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:0.2rem;
+  }
+  .step-body { font-size:0.92rem; color:var(--muted); line-height:1.55; margin:0; }
+
+  /* ── PARTNERSHIP SECTION ── */
+  #partner {
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(201,160,96,0.07) 0%, transparent 60%);
+  }
+
+  .partner-inner { text-align:center; max-width:720px; margin:0 auto; }
+
+  .partner-signal {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem; margin:2.5rem 0; text-align:left;
+  }
+  @media(max-width:580px){ .partner-signal{ grid-template-columns:1fr; } }
+
+  .signal-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:1.3rem;
+    transition:background 0.3s;
+  }
+  .signal-card:hover { background:rgba(201,160,96,0.06); }
+  .signal-label {
+    font-family:'Cinzel',serif; font-size:0.58rem;
+    letter-spacing:0.18em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:0.3rem;
+  }
+  .signal-text { font-size:0.95rem; color:var(--parch-dim); line-height:1.55; margin:0; }
+  .signal-card.match .signal-label { color:var(--copper); }
+  .signal-card.match .signal-text { color:var(--parchment); }
+
+  .partner-cta {
+    margin-top:2.5rem; display:flex;
+    flex-direction:column; align-items:center; gap:0.8rem;
+  }
+  .partner-note {
+    font-family:'EB Garamond',serif; font-style:italic;
+    font-size:0.95rem; color:var(--muted);
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:1.5rem; margin-top:2rem;
+  }
+  .project-card {
+    background:rgba(24,16,8,0.8);
+    border:1px solid var(--border);
+    overflow:hidden; text-decoration:none;
+    color:inherit; display:block;
+    transition:transform 0.35s, box-shadow 0.35s;
+  }
+  .project-card:hover {
+    transform:translateY(-6px);
+    box-shadow:0 24px 48px rgba(0,0,0,0.5), 0 0 20px rgba(201,160,96,0.08);
+  }
+  .project-thumb {
+    height:150px; display:flex;
+    align-items:center; justify-content:center;
+    background:linear-gradient(135deg,rgba(139,90,43,0.25),rgba(19,13,7,0.9));
+    border-bottom:1px solid var(--border);
+    position:relative;
+  }
+  .project-tag {
+    position:absolute; top:0.8rem; right:0.8rem;
+    font-family:'Cinzel',serif; font-size:0.55rem;
+    letter-spacing:0.15em; padding:0.3rem 0.7rem;
+    background:rgba(201,160,96,0.15);
+    border:1px solid rgba(201,160,96,0.3);
+    color:var(--copper);
+  }
+  .project-body { padding:1.4rem; }
+  .project-course {
+    font-family:'Cinzel',serif; font-size:0.58rem;
+    letter-spacing:0.18em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:0.35rem;
+  }
+  .project-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.15rem; font-weight:600;
+    color:var(--parchment); margin-bottom:0.5rem;
+  }
+  .project-desc { font-size:0.93rem; color:var(--muted); line-height:1.55; margin:0 0 1rem; }
+  .project-link {
+    font-family:'Cinzel',serif; font-size:0.6rem;
+    letter-spacing:0.18em; color:var(--copper);
+    text-decoration:none; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:0.4rem;
+    transition:gap 0.3s;
+  }
+  .project-card:hover .project-link { gap:0.7rem; }
+  .project-link::after { content:'→'; }
+  .project-card.coming {
+    border-style:dashed; border-color:rgba(201,160,96,0.1);
+    opacity:0.45; pointer-events:none;
+  }
+
+  /* ── COURSES ── */
+  .timeline { margin-top:2.5rem; }
+  .semester-block { margin-bottom:2.2rem; }
+  .semester-head {
+    font-family:'Cinzel',serif; font-size:0.68rem;
+    letter-spacing:0.3em; color:var(--copper);
+    text-transform:uppercase; margin-bottom:0.9rem;
+    padding-bottom:0.5rem;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:0.8rem;
+  }
+  .s-pill {
+    font-size:0.55rem; padding:0.2rem 0.6rem;
+    border-radius:20px; letter-spacing:0.1em;
+  }
+  .s-done     { background:rgba(42,152,90,0.15); color:#6bde9a; border:1px solid rgba(42,152,90,0.25); }
+  .s-now      { background:rgba(201,160,96,0.15); color:var(--copper); border:1px solid rgba(201,160,96,0.3); }
+  .s-next     { background:rgba(139,90,43,0.15); color:var(--muted); border:1px solid rgba(139,90,43,0.2); }
+  .courses-row {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:0.7rem;
+  }
+  .course-pill {
+    background:var(--surface); border:1px solid var(--border);
+    padding:0.85rem 1.1rem;
+    display:flex; flex-direction:column; gap:0.15rem;
+    transition:background 0.3s;
+  }
+  .course-pill:hover { background:rgba(201,160,96,0.05); }
+  .c-code {
+    font-family:'Cinzel',serif; font-size:0.58rem;
+    letter-spacing:0.15em; color:var(--copper);
+  }
+  .c-name { font-size:0.97rem; color:var(--parchment); }
+  .c-meta { font-size:0.8rem; color:var(--muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    position:relative; z-index:1;
+    text-align:center; padding:3.5rem 2rem;
+    border-top:1px solid var(--border);
+    background:rgba(13,8,3,0.6);
+  }
+  .footer-name {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.6rem; font-weight:600; font-style:italic;
+    color:var(--copper); margin-bottom:0.3rem;
+  }
+  .footer-tag {
+    font-family:'Cinzel',serif; font-size:0.6rem;
+    letter-spacing:0.3em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:1.8rem;
+  }
+  .footer-links {
+    display:flex; justify-content:center;
+    gap:2.5rem; flex-wrap:wrap; margin-bottom:2rem;
+  }
+  .footer-links a {
+    font-family:'Cinzel',serif; font-size:0.62rem;
+    letter-spacing:0.2em; color:var(--muted);
+    text-decoration:none; transition:color 0.3s;
+    text-transform:uppercase;
+  }
+  .footer-links a:hover { color:var(--copper); }
+  .footer-copy {
+    font-family:'EB Garamond',serif; font-style:italic;
+    font-size:0.88rem; color:rgba(201,160,96,0.2);
+  }
+  .footer-mission {
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic; font-size:1rem;
+    color:rgba(201,160,96,0.3); margin-bottom:1.5rem;
+    max-width:500px; margin-left:auto; margin-right:auto;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <a class="nav-brand" href="#">Byron Enrico</a>
+  <div class="nav-links">
+    <a href="#code">Leadership</a>
+    <a href="#background">Background</a>
+    <a href="#culture">Culture</a>
+    <a href="#projects">Work</a>
+    <a href="#partner" class="nav-cta">Let's Talk</a>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section id="hero">
+  <div class="inner">
+    <div class="hero-wm">Virtuous</div>
+    <div class="hero-layout reveal visible">
+
+      <div>
+        <p class="hero-eyebrow">Faithful Leader · Strategic Operator</p>
+        <h1>Byron<br/><em>Enrico</em></h1>
+
+        <div class="hero-tagline">
+          <strong>Give them a reason to come.</strong><br/>
+          I'll give them a reason to stay.
+        </div>
+
+        <p class="hero-bio">
+          I take a vision — even a small, unfinished one — and build the teams, culture, and operating systems that make it real. Simple. Realistic. Repeatable. Scalable. I'm not the closer or the face. I'm the foundational operator who turns a great idea into a great organization.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#partner">Find Your Missing Piece</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/byron-enrico/" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="identity-pillars reveal reveal-delay">
+        <div class="pillar">
+          <p class="pillar-label">Mission</p>
+          <p class="pillar-text">A faithful leader pursuing a Christ-centered legacy — one my three daughters can point to and say their father stood for something beyond himself.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar-label">Operating Code</p>
+          <p class="pillar-text">Faith leads everything. The mission and the people always come before me.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar-label">Core Gift</p>
+          <p class="pillar-text">I don't want to be the example. I want to be the inspiration.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar-label">MBA Candidate</p>
+          <p class="pillar-text">William Jessup University · Business Analytics · Class of 2027</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     LEADERSHIP CODE
+══════════════════════════════════ -->
+<section id="code">
+  <span class="swm">Code</span>
+  <div class="inner reveal">
+    <p class="section-eyebrow">What I Stand On</p>
+    <h2>The Leadership <em>Code</em></h2>
+    <div class="rule"></div>
+
+    <p>My leadership philosophy wasn't built in a classroom. It was forged through nine years of Army Airborne Infantry service, developing soldiers into high-performing assets who could operate independently, under pressure, and without supervision. What I learned about people, standards, and servant leadership in uniform has never left me.</p>
+    <p>These are the principles I carry into every team, every business, and every partnership.</p>
+
+    <div class="code-grid" style="margin-top:2.5rem;">
+      <div class="code-card">
+        <div class="code-number">01</div>
+        <div class="code-title">Servant First</div>
+        <p class="code-body">The leader's job is to create conditions for others to be great. Authority is a stewardship, not a reward. I put the mission and the people ahead of my own comfort, ego, or recognition. Always.</p>
+      </div>
+      <div class="code-card">
+        <div class="code-number">02</div>
+        <div class="code-title">The Multiplier</div>
+        <p class="code-body">I can't make most people experts. But I can make a lot of people very good at the fundamentals, and that changes organizations. The light bulb moment in someone's eyes is my fuel. That never gets old.</p>
+      </div>
+      <div class="code-card">
+        <div class="code-number">03</div>
+        <div class="code-title">Standards Without Ego</div>
+        <p class="code-body">The standard I hold for my team starts with the one I hold for myself. I show up ready, stay consistent, and expect the same from the people around me. Not because I'm rigid, but because people who choose to grow deserve a leader worth following.</p>
+      </div>
+      <div class="code-card">
+        <div class="code-number">04</div>
+        <div class="code-title">Simple, Real, Repeatable</div>
+        <p class="code-body">I build systems that don't require genius to run, they require consistency. Every team, every process, every culture I build is designed to work without me.</p>
+      </div>
+    </div>
+
+    <div class="manifesto" style="margin-top:2.5rem;">
+      <p class="manifesto-text">"I am out of a job when everyone around me has become who they were meant to be as a virtuous leader and professional. That's the goal. That's always been the goal."</p>
+      <p class="manifesto-attr">Byron Enrico · Leadership Philosophy</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     BACKGROUND
+══════════════════════════════════ -->
+<section id="background">
+  <span class="swm">Roots</span>
+  <div class="inner reveal">
+    <p class="section-eyebrow">Context, Not Credential</p>
+    <h2>Where I've <em>Been</em></h2>
+    <div class="rule"></div>
+
+    <p>Every chapter of my career has been about one thing: developing people and building teams that perform at a higher level than anyone expected. The industries have changed. The principle hasn't.</p>
+
+    <div class="bg-row">
+      <div class="bg-block">
+        <p class="bg-label">Service</p>
+        <p class="bg-title">US Army Airborne Infantry · 9 Years</p>
+        <p class="bg-body">Led, developed, and mentored soldiers in high-stakes environments that demanded discipline, humility, and precision. Rose from individual contributor to leading assessment, selection, training, and development of soldiers into Battalion-level assets. Operated without supervision at levels most never reach.</p>
+      </div>
+      <div class="bg-block">
+        <p class="bg-label">Industry</p>
+        <p class="bg-title">Defense Manufacturing · Production Planning</p>
+        <p class="bg-body">Applied operational discipline to a precision manufacturing environment. Coordinated complex supply chains, managed schedules, and navigated the constraints of a highly regulated industry. Learned the gap between what an organization is and what it could be, and felt the pull to close it.</p>
+      </div>
+      <div class="bg-block">
+        <p class="bg-label">Academic</p>
+        <p class="bg-title">BS Operations & Supply Chain · Golden Gate University</p>
+        <p class="bg-body">Built the analytical and operational foundation that sharpened how I think about systems, constraints, and process design. The academic framework that gave language to instincts I'd already been living.</p>
+      </div>
+      <div class="bg-block">
+        <p class="bg-label">In Progress</p>
+        <p class="bg-title">MBA · Business Analytics · WJU 2027</p>
+        <p class="bg-body">Pursuing the MBA not to find direction, but to find the vehicle for a legacy already defined. Building the strategic and analytical toolkit and the network to step into a foundational role in a business worth building.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     CULTURE
+══════════════════════════════════ -->
+<section id="culture">
+  <span class="swm">Culture</span>
+  <div class="inner reveal">
+    <p class="section-eyebrow">What I Build Around People</p>
+    <h2>The Culture I <em>Create</em></h2>
+    <div class="rule"></div>
+
+    <p>Culture isn't a perk list or a values poster. It's what happens when the leader isn't in the room. It's the standard that lives in the people, not in the handbook. Here is what teams I lead actually experience.</p>
+
+    <div class="culture-split">
+      <div>
+        <ul class="culture-list">
+          <li>A deep, rich, and unique environment where people know exactly where they stand and why it matters</li>
+          <li>High expectations held first by me, then by the team, and eventually by each other</li>
+          <li>Practical, grounded leadership that is easy going without ever losing the standard</li>
+          <li>Faith-informed values that create psychological safety and genuine accountability at the same time</li>
+          <li>A team that chooses to do hard things and gets better every time they do</li>
+          <li>A place where professional growth and personal growth happen simultaneously, because they always do</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="cycle-box">
+          <p style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.25em; color:var(--copper); text-transform:uppercase; margin-bottom:1.2rem;">The Development Cycle</p>
+          <div class="cycle-step">
+            <span class="step-n">1</span>
+            <div class="step-content">
+              <p class="step-title">Find the Raw Material</p>
+              <p class="step-body">Identify people who want to accelerate, not just show up. Potential matters more than polish.</p>
+            </div>
+          </div>
+          <div class="cycle-step">
+            <span class="step-n">2</span>
+            <div class="step-content">
+              <p class="step-title">Translate the Complex</p>
+              <p class="step-body">Break high-level skills into digestible, actionable fundamentals. Everyone can be very good at the basics.</p>
+            </div>
+          </div>
+          <div class="cycle-step">
+            <span class="step-n">3</span>
+            <div class="step-content">
+              <p class="step-title">Watch the Light Come On</p>
+              <p class="step-body">The moment of clarity. The shift from "I don't know if I can" to "I've got this." That's the fuel.</p>
+            </div>
+          </div>
+          <div class="cycle-step">
+            <span class="step-n">4</span>
+            <div class="step-content">
+              <p class="step-title">Send Them Forward</p>
+              <p class="step-body">The goal is leaders who don't need me. When they no longer do, the cycle worked. Start again.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     PROJECTS
+══════════════════════════════════ -->
+<section id="projects">
+  <span class="swm">Work</span>
+  <div class="inner reveal">
+    <p class="section-eyebrow">Academic Work</p>
+    <h2>Projects & <em>Presentations</em></h2>
+    <div class="rule"></div>
+    <p>Coursework from Jessup's MBA program — research, analysis, and presentations built to solve real business problems. Each project reflects the same operating philosophy: clear thinking, real output, honest limitations.</p>
+
+    <div class="projects-grid">
+
+      <a class="project-card" href="https://byronjames100.github.io/WJU-MBA-/" target="_blank">
+        <div class="project-thumb">
+          <span class="project-tag">Live ↗</span>
+          <svg width="70" height="70" viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="88" stroke="rgba(201,160,96,0.35)" stroke-width="1" stroke-dasharray="3 5"/>
+            <circle cx="100" cy="100" r="8" fill="rgba(201,160,96,0.2)" stroke="rgba(201,160,96,0.6)" stroke-width="1.5"/>
+            <polygon points="100,18 106,92 94,92" fill="#c9a060"/>
+            <polygon points="100,182 106,108 94,108" fill="rgba(201,160,96,0.3)"/>
+            <polygon points="182,100 108,106 108,94" fill="rgba(201,160,96,0.3)"/>
+            <polygon points="18,100 92,106 92,94" fill="rgba(201,160,96,0.3)"/>
+            <text x="97" y="14" fill="rgba(201,160,96,0.8)" font-family="serif" font-size="11" font-weight="bold">N</text>
+            <circle cx="100" cy="100" r="3" fill="#c9a060"/>
+          </svg>
+        </div>
+        <div class="project-body">
+          <p class="project-course">Graduate Research Methods · BUS591</p>
+          <p class="project-title">The Compass That Moved the World</p>
+          <p class="project-desc">An interactive web presentation tracing the compass from ancient China to modern GPS, covering the societal, commercial, and technological implications across 2,000 years of navigational history.</p>
+          <span class="project-link">View Presentation</span>
+        </div>
+      </a>
+
+      <div class="project-card coming">
+        <div class="project-thumb">
+          <span class="project-tag">Coming Soon</span>
+          <svg width="55" height="55" viewBox="0 0 100 100" fill="none">
+            <rect x="20" y="25" width="60" height="55" rx="3" stroke="rgba(201,160,96,0.35)" stroke-width="1.5"/>
+            <line x1="35" y1="42" x2="65" y2="42" stroke="rgba(201,160,96,0.25)" stroke-width="1.5"/>
+            <line x1="35" y1="52" x2="65" y2="52" stroke="rgba(201,160,96,0.25)" stroke-width="1.5"/>
+            <line x1="35" y1="62" x2="52" y2="62" stroke="rgba(201,160,96,0.25)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="project-body">
+          <p class="project-course">Accounting & Financial Analysis · ACCT548</p>
+          <p class="project-title">Financial Analysis Project</p>
+          <p class="project-desc">In progress, Spring 2026</p>
+        </div>
+      </div>
+
+      <div class="project-card coming">
+        <div class="project-thumb">
+          <span class="project-tag">Coming Soon</span>
+          <svg width="55" height="55" viewBox="0 0 100 100" fill="none">
+            <polyline points="15,75 35,45 55,58 75,25 85,33" stroke="rgba(201,160,96,0.35)" stroke-width="2" fill="none"/>
+            <circle cx="35" cy="45" r="2.5" fill="rgba(201,160,96,0.45)"/>
+            <circle cx="55" cy="58" r="2.5" fill="rgba(201,160,96,0.45)"/>
+            <circle cx="75" cy="25" r="2.5" fill="rgba(201,160,96,0.45)"/>
+          </svg>
+        </div>
+        <div class="project-body">
+          <p class="project-course">Strategic AI · BUS670</p>
+          <p class="project-title">AI-Powered Competitive Intelligence Tool</p>
+          <p class="project-desc">In progress, Spring 2026</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     COURSES
+══════════════════════════════════ -->
+<section id="courses">
+  <span class="swm">Journey</span>
+  <div class="inner reveal">
+    <p class="section-eyebrow">Academic Journey</p>
+    <h2>MBA Course <em>Schedule</em></h2>
+    <div class="rule"></div>
+    <p>William Jessup University, Rocklin MBA Program. Intensive 7-week courses with a <strong>Business Analytics emphasis</strong>. Graduating 2027.</p>
+
+    <div class="timeline">
+
+      <div class="semester-block">
+        <div class="semester-head">Fall 2025 <span class="s-pill s-done">✓ Complete</span></div>
+        <div class="courses-row">
+          <div class="course-pill"><span class="c-code">BUS500</span><span class="c-name">Principled Leadership & Ethics</span><span class="c-meta">Aug – Oct · Prof. Ellis</span></div>
+          <div class="course-pill"><span class="c-code">BUS544</span><span class="c-name">Microeconomics for Managers</span><span class="c-meta">Oct – Dec · Prof. Martinez</span></div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-head">Spring 2026 <span class="s-pill s-now">● In Progress</span></div>
+        <div class="courses-row">
+          <div class="course-pill"><span class="c-code">BUS591</span><span class="c-name">Graduate Research Methods</span><span class="c-meta">Jan – Mar · Prof. Gilmore · Online</span></div>
+          <div class="course-pill"><span class="c-code">ACCT548</span><span class="c-name">Accounting & Financial Analysis</span><span class="c-meta">Jan – Mar · Prof. Richardson</span></div>
+          <div class="course-pill"><span class="c-code">BUS670</span><span class="c-name">Strategic AI for Modern Business</span><span class="c-meta">Mar – Apr · Prof. Bryant</span></div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-head">Summer 2026 <span class="s-pill s-next">↑ Upcoming</span></div>
+        <div class="courses-row">
+          <div class="course-pill"><span class="c-code">BUS543</span><span class="c-name">Finance & Data Analytics</span><span class="c-meta">May – Jun · Prof. Richardson</span></div>
+          <div class="course-pill"><span class="c-code">BUS570</span><span class="c-name">Global Operations Mgmt & Supply Chain</span><span class="c-meta">Jun – Aug · Prof. Raskin</span></div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-head">Fall 2026 <span class="s-pill s-next">↑ Upcoming</span></div>
+        <div class="courses-row">
+          <div class="course-pill"><span class="c-code">BUS620</span><span class="c-name">Global Marketing Strategy</span><span class="c-meta">Aug – Oct</span></div>
+          <div class="course-pill"><span class="c-code">BUS571</span><span class="c-name">Global Environment of Business</span><span class="c-meta">Aug – Oct · Prof. Winslow</span></div>
+          <div class="course-pill"><span class="c-code">BUS690</span><span class="c-name">Strategic Planning</span><span class="c-meta">Oct – Dec · Prof. Rice</span></div>
+        </div>
+      </div>
+
+      <div class="semester-block">
+        <div class="semester-head">Spring – Summer 2027 <span class="s-pill s-next">↑ Graduation</span></div>
+        <div class="courses-row">
+          <div class="course-pill"><span class="c-code">BUS682</span><span class="c-name">Entrepreneurial Management</span><span class="c-meta">Jan – Feb · Prof. Bryant</span></div>
+          <div class="course-pill"><span class="c-code">BUS691</span><span class="c-name">Big Data, Predictive Analytics & Ethics</span><span class="c-meta">Analytics Emphasis</span></div>
+          <div class="course-pill"><span class="c-code">BUS692</span><span class="c-name">Decision Models, Power BI and Excel</span><span class="c-meta">Analytics Emphasis</span></div>
+          <div class="course-pill"><span class="c-code">BUS693</span><span class="c-name">Visual Analytics — Tableau</span><span class="c-meta">Analytics Emphasis</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     PARTNER
+══════════════════════════════════ -->
+<section id="partner">
+  <div class="inner reveal">
+    <div class="partner-inner">
+      <p class="section-eyebrow" style="justify-content:center;">The Right Fit</p>
+      <h2>Are You the <em>Visionary</em><br/>I'm Looking For?</h2>
+      <div class="rule" style="margin:1rem auto 1.5rem;"></div>
+
+      <p style="text-align:center;">I'm not looking for a job. I'm looking for the right partner, someone with a vision they know is bigger than what they can execute alone. I bring the operational architecture, the team-building discipline, and the culture that makes people want to stay and grow. You run the interference. I'll build what's behind it.</p>
+
+      <div class="partner-signal">
+        <div class="signal-card">
+          <p class="signal-label">You might be who I'm looking for if...</p>
+          <p class="signal-text">You have a compelling vision but keep hitting the ceiling on execution, culture, or team retention</p>
+        </div>
+        <div class="signal-card match">
+          <p class="signal-label">What I bring to the table</p>
+          <p class="signal-text">Strategic operations, team development, culture architecture, and a leadership code that doesn't bend under pressure</p>
+        </div>
+        <div class="signal-card">
+          <p class="signal-label">What I'm honest about</p>
+          <p class="signal-text">I'm not a born salesman or cold caller. I thrive when someone else runs the front and I build everything behind it into something lasting</p>
+        </div>
+        <div class="signal-card match">
+          <p class="signal-label">The standard I hold</p>
+          <p class="signal-text">Faith-first. Family-grounded. A legacy my daughters can point to. Any partnership that conflicts with that isn't the right one. I'll tell you that plainly</p>
+        </div>
+      </div>
+
+      <div class="manifesto" style="margin:2rem 0;">
+        <p class="manifesto-text">"Give them a reason to come. I'll give them a reason to stay."</p>
+        <p class="manifesto-attr">Byron Enrico · Value Proposition</p>
+      </div>
+
+      <div class="partner-cta">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/byron-enrico/" target="_blank">Connect on LinkedIn</a>
+        <p class="partner-note">If this resonates, reach out. The right conversation starts simply.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--copper),transparent);margin:0 auto 2rem;"></div>
+  <p class="footer-name">Byron Enrico</p>
+  <p class="footer-tag">Faithful Leader · Strategic Operator · MBA Candidate 2027</p>
+  <p class="footer-mission">"A faithful leader pursuing a Christ-centered legacy."</p>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/byron-enrico/" target="_blank">LinkedIn</a>
+    <a href="https://byronjames100.github.io/WJU-MBA-/" target="_blank">Compass Project</a>
+    <a href="https://github.com/byronjames100" target="_blank">GitHub</a>
+  </div>
+  <p class="footer-copy">Byron Enrico &nbsp;·&nbsp; William Jessup University MBA &nbsp;·&nbsp; Carmichael, CA</p>
+</footer>
+
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY, t = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (s / t * 100) + '%';
+  });
+
+  // Reveal on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
